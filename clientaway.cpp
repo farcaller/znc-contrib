@@ -141,24 +141,6 @@ public:
 				m_pClient->PutClient(":irc.znc.in 305 " + m_pClient->GetNick() + " :You are no longer marked as being away");
 
 				if (m_pNetwork) {
-					const vector<CChan*>& vChans = m_pNetwork->GetChans();
-					vector<CChan*>::const_iterator it;
-
-					for (it = vChans.begin(); it != vChans.end(); ++it) {
-						// Skip channels which are detached or we don't use keepbuffer
-						if (!(*it)->IsDetached() && (*it)->AutoClearChanBuffer()) {
-							(*it)->ClearBuffer();
-						}
-					}
-
-#if (VERSION_MAJOR >= 1) && (VERSION_MINOR >= 5)
-					for (CQuery* pQuery : m_pNetwork->GetQueries()) {
-						m_pNetwork->DelQuery(pQuery->GetName());
-					}
-#else
-					m_pNetwork->ClearQueryBuffer();
-#endif
-
 					if (GetAutoAway() && m_pNetwork->IsIRCAway()) {
 						PutIRC("AWAY");
 					}
